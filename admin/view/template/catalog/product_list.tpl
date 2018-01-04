@@ -84,6 +84,8 @@
                 <label class="control-label" for="input-model"><?php echo $entry_model; ?></label>
                 <input type="text" name="filter_model" value="<?php echo $filter_model; ?>" placeholder="<?php echo $entry_model; ?>" id="input-model" class="form-control" />
               </div>
+              <a onclick="location = '<?php echo $exel; ?>'" class="btn btn-primary pull-left"><?php echo $button_exel; ?></a>
+              <?php /*<button type="button" id="button-exel" class="btn btn-primary pull-left"><i class="fa fa-search"></i> <?php echo $button_exel; ?></button>&nbsp;&nbsp;*/?>
               <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> <?php echo $button_filter; ?></button>
             </div>
           </div>

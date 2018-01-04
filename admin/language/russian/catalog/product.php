@@ -4,6 +4,7 @@ $_['heading_title']          	= 'Товары';
 
 // Text
 $_['text_success']          	= 'Список товаров обновлен!';
+$_['text_success_exel']         = 'Excel <a href="/system/storage/download/price.xls" target="_blank">файл</a> обновлен!';
 $_['text_list']          		= 'Список товаров';
 $_['text_add']          		= 'Добавление товара';
 $_['text_edit']         	 	= 'Редактирование товара';

@@ -40,6 +40,7 @@ $_['button_close']          		= 'Закрыть';
 $_['button_enable']          		= 'Включить';
 $_['button_disable']          		= 'Запрещено';
 $_['button_filter']          		= 'Фильтр';
+$_['button_exel']          		    = 'Сформировать таблицу Exel';
 $_['button_send']          			= 'Отправить';
 $_['button_edit']          			= 'Редактировать';
 $_['button_copy']          			= 'Копировать';
