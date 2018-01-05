@@ -1802,10 +1802,12 @@ class ControllerCatalogProduct extends Controller {
 			$category = $this->model_catalog_category->getCategory($category_id);
 
 			if (is_file(DIR_IMAGE . $result['image'])) {
-				$image = $this->model_tool_image->resize($result['image'], 40, 40);
+				$image = $this->model_tool_image->resize($result['image'], 40, 40, 'onesize');
 			} else {
-				$image = $this->model_tool_image->resize('no_image.png', 40, 40);
+				$image = $this->model_tool_image->resize('no_image.png', 40, 40, 'onesize');
 			}
+
+			$image = str_replace(HTTP_IMAGE,DIR_IMAGE,$image);
 
 			$special = false;
 
@@ -1941,8 +1943,6 @@ class ControllerCatalogProduct extends Controller {
 		$numRow = 3;
 		foreach($products as $product){
 			$sheet->setCellValue("A".$numRow, $product['name']);
-			$sheet->getStyle('A'.$numRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$sheet->getStyle('A'.$numRow)->getFill()->getStartColor()->setRGB('FFFFFF');
 			$sheet->getStyle('A'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyle('A'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$sheet->getStyle('A'.$numRow)->getAlignment()->setWrapText(true);
@@ -1952,55 +1952,44 @@ class ControllerCatalogProduct extends Controller {
 				$image = new PHPExcel_Worksheet_Drawing();
 				$image->setPath($product['image']);
 				$image->setCoordinates("B".$numRow);
-				$image->setOffsetX(0);
-				$image->setOffsetY(0);
-				$sheet->getRowDimension(2)->setRowHeight(40);
+				$image->setOffsetX(30);
+				$image->setOffsetY(2);
+				$image->setHeight(40);
+				$image->setWidth(40);
+				$sheet->getRowDimension($numRow)->setRowHeight(35);
+				//$sheet->getColumnDimension("B")->setWidth(35);
 				$image->setWorksheet($sheet);
 			}
-			$sheet->getStyle('B'.$numRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$sheet->getStyle('B'.$numRow)->getFill()->getStartColor()->setRGB('FFFFFF');
 			$sheet->getStyle('B'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyle('B'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$sheet->getStyle('B'.$numRow)->getAlignment()->setWrapText(true);
 
 			$sheet->setCellValue("C".$numRow, '');
-			$sheet->getStyle('C'.$numRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$sheet->getStyle('C'.$numRow)->getFill()->getStartColor()->setRGB('FFFFFF');
 			$sheet->getStyle('C'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyle('C'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$sheet->getStyle('C'.$numRow)->getAlignment()->setWrapText(true);
 
 			$sheet->setCellValue("D".$numRow, $product['model']);
-			$sheet->getStyle('D'.$numRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$sheet->getStyle('D'.$numRow)->getFill()->getStartColor()->setRGB('FFFFFF');
 			$sheet->getStyle('D'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyle('D'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$sheet->getStyle('D'.$numRow)->getAlignment()->setWrapText(true);
 
 			$sheet->setCellValue("E".$numRow, $product['sku']);
-			$sheet->getStyle('E'.$numRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$sheet->getStyle('E'.$numRow)->getFill()->getStartColor()->setRGB('FFFFFF');
 			$sheet->getStyle('E'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyle('E'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$sheet->getStyle('E'.$numRow)->getAlignment()->setWrapText(true);
 
 			$sheet->setCellValue("F".$numRow, $product['price']);
-			$sheet->getStyle('F'.$numRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$sheet->getStyle('F'.$numRow)->getFill()->getStartColor()->setRGB('FFFFFF');
 			$sheet->getStyle('F'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyle('F'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$sheet->getStyle('F'.$numRow)->getAlignment()->setWrapText(true);
 
 			$sheet->setCellValue("G".$numRow, $product['special']?$product['special']:'');
-			$sheet->getStyle('G'.$numRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$sheet->getStyle('G'.$numRow)->getFill()->getStartColor()->setRGB('FFFFFF');
 			$sheet->getStyle('G'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyle('G'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$sheet->getStyle('G'.$numRow)->getAlignment()->setWrapText(true);
 
 			$sheet->setCellValue("H".$numRow, $product['quantity']);
-			$sheet->getStyle('H'.$numRow)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$sheet->getStyle('H'.$numRow)->getFill()->getStartColor()->setRGB('FFFFFF');
 			$sheet->getStyle('H'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyle('H'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$sheet->getStyle('H'.$numRow)->getAlignment()->setWrapText(true);

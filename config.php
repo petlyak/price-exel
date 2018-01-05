@@ -2,8 +2,10 @@
 $host = $_SERVER['HTTP_HOST'];
 // HTTP
 define('HTTP_SERVER', 'http://'.$host.'/');
+define('HTTP_IMAGE', 'http://'.$host.'/image/');
 // HTTPS
 define('HTTPS_SERVER', 'http://'.$host.'/');
+define('HTTPS_IMAGE', 'http://'.$host.'/image/');
 
 // DIR
 $dir = dirname(__FILE__);

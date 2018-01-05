@@ -3,10 +3,12 @@ $host = $_SERVER['HTTP_HOST'];
 // HTTP
 define('HTTP_SERVER', 'http://'.$host.'/admin/');
 define('HTTP_CATALOG', 'http://'.$host.'/');
+define('HTTP_IMAGE', 'http://'.$host.'/image/');
 
 // HTTPS
 define('HTTPS_SERVER', 'http://'.$host.'/admin/');
 define('HTTPS_CATALOG', 'http://'.$host.'/');
+define('HTTPS_IMAGE', 'http://'.$host.'/image/');
 
 // DIR
 $dir = dirname(dirname(__FILE__));
