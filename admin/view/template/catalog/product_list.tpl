@@ -84,8 +84,8 @@
                 <label class="control-label" for="input-model"><?php echo $entry_model; ?></label>
                 <input type="text" name="filter_model" value="<?php echo $filter_model; ?>" placeholder="<?php echo $entry_model; ?>" id="input-model" class="form-control" />
               </div>
-              <a onclick="location = '<?php echo $exel; ?>'" class="btn btn-primary pull-left"><?php echo $button_exel; ?></a>
-              <?php /*<button type="button" id="button-exel" class="btn btn-primary pull-left"><i class="fa fa-search"></i> <?php echo $button_exel; ?></button>&nbsp;&nbsp;*/?>
+              <a onclick="$('#form-product').attr('action', '<?php echo $exel; ?>'); $('#form-product').submit();" class="btn btn-primary pull-left"><?php echo $button_exel; ?></a>
+              <?php /*<button type="button" id="button-exel" class="btn btn-primary pull-left"> <?php echo $button_exel; ?></button>*/?>
               <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> <?php echo $button_filter; ?></button>
             </div>
           </div>
@@ -226,6 +226,59 @@ $('#button-filter').on('click', function() {
 
 	location = url;
 });
+/*$(document).ready(function() {
+    $('#button-exel').on('click', function() {
+        var url = 'index.php?route=catalog/product/toprint&token=<?php echo $token; ?>';
+
+        var filter_name = $('input[name=\'filter_name\']').val();
+
+        if (filter_name) {
+          url += '&filter_name=' + encodeURIComponent(filter_name);
+        }
+
+        var filter_model = $('input[name=\'filter_model\']').val();
+
+        if (filter_model) {
+          url += '&filter_model=' + encodeURIComponent(filter_model);
+        }
+
+        var filter_price = $('input[name=\'filter_price\']').val();
+
+        if (filter_price) {
+          url += '&filter_price=' + encodeURIComponent(filter_price);
+        }
+
+        var filter_category = $('select[name=\'filter_category\']').val();
+
+        if (filter_category != '*') {
+          url += '&filter_category=' + encodeURIComponent(filter_category);
+        }
+
+        var filter_quantity = $('input[name=\'filter_quantity\']').val();
+
+        if (filter_quantity) {
+          url += '&filter_quantity=' + encodeURIComponent(filter_quantity);
+        }
+
+        var filter_status = $('select[name=\'filter_status\']').val();
+
+        if (filter_status != '*') {
+          url += '&filter_status=' + encodeURIComponent(filter_status);
+        }
+
+        var selected = [];
+        jQuery('input:checkbox[name=selected]:checked').each(function() {
+            selected.push($(this).val());
+            alert($(this).val());
+        });
+        console.log(selected);
+        if (selected) {
+            url += '&selected=' + encodeURIComponent(selected);
+        }
+
+        location = url;
+    });
+});*/
 //--></script>
   <script type="text/javascript"><!--
 $('input[name=\'filter_name\']').autocomplete({

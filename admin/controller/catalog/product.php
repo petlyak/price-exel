@@ -352,7 +352,7 @@ class ControllerCatalogProduct extends Controller {
 		$data['add'] = $this->url->link('catalog/product/add', 'token=' . $this->session->data['token'] . $url, 'SSL');
 		$data['copy'] = $this->url->link('catalog/product/copy', 'token=' . $this->session->data['token'] . $url, 'SSL');
 		$data['delete'] = $this->url->link('catalog/product/delete', 'token=' . $this->session->data['token'] . $url, 'SSL');
-		$data['exel'] = $this->url->link('catalog/product/toprint', 'token=' . $this->session->data['token'], 'SSL');
+		$data['exel'] = $this->url->link('catalog/product/toprint', 'token=' . $this->session->data['token'] . $url, 'SSL');
 
 		$data['products'] = array();
 
@@ -1574,6 +1574,12 @@ class ControllerCatalogProduct extends Controller {
 			$filter_quantity = null;
 		}
 
+		if (isset($this->request->get['filter_category'])) {
+			$filter_category = $this->request->get['filter_category'];
+		} else {
+			$filter_category = NULL;
+		}
+
 		if (isset($this->request->get['filter_status'])) {
 			$filter_status = $this->request->get['filter_status'];
 		} else {
@@ -1583,7 +1589,7 @@ class ControllerCatalogProduct extends Controller {
 		if (isset($this->request->get['sort'])) {
 			$sort = $this->request->get['sort'];
 		} else {
-			$sort = 'p2c.category_id';
+			$sort = 'pd.name';
 		}
 
 		if (isset($this->request->get['order'])) {
@@ -1631,32 +1637,18 @@ class ControllerCatalogProduct extends Controller {
 		$this->load->model('catalog/category');
 		$this->load->model('tool/image');
 
-		$results_category = $this->model_catalog_category->getCategories();
-
 		$products = array();
 
-		$filter_data = array(
-			'filter_name'	  => $filter_name,
-			'filter_model'	  => $filter_model,
-			'filter_price'	  => $filter_price,
-			'filter_quantity' => $filter_quantity,
-			'filter_status'   => $filter_status,
-			'filter_main_category' => 1,
-			'sort'            => $sort,
-			'order'           => $order,
-			//'start'           => ($page - 1) * $this->config->get('config_limit_admin'),
-			//'limit'           => $this->config->get('config_limit_admin')
-		);
+		//якщо вибрані продукти то їх заганяти в ексель
+		if(isset($this->request->post['selected']) && !empty($this->request->post['selected'])){
+			$selected = $this->request->post['selected'];//implode(',',array_unique($this->request->post['selected']));
+			for($i=0;$i<count($selected);$i++){
+				$product = $this->model_catalog_product->getProduct($selected[$i]);
+				$main_category = $this->model_catalog_product->getProductMainCategoryId($selected[$i]);
+				$category = $this->model_catalog_category->getCategory($main_category);
 
-		foreach ($results_category as $category) {
-			$filter_data['filter_category'] = $category['category_id'];
-
-			$results = $this->model_catalog_product->getProducts($filter_data);
-
-			foreach ($results as $result) {
-
-				if (is_file(DIR_IMAGE . $result['image'])) {
-					$image = $this->model_tool_image->resize($result['image'], 40, 40);
+				if (is_file(DIR_IMAGE . $product['image'])) {
+					$image = $this->model_tool_image->resize($product['image'], 40, 40);
 				} else {
 					$image = $this->model_tool_image->resize('no_image.png', 40, 40);
 				}
@@ -1665,7 +1657,7 @@ class ControllerCatalogProduct extends Controller {
 
 				$special = false;
 
-				$product_specials = $this->model_catalog_product->getProductSpecials($result['product_id']);
+				$product_specials = $this->model_catalog_product->getProductSpecials($product['product_id']);
 
 				foreach ($product_specials  as $product_special) {
 					if (($product_special['date_start'] == '0000-00-00' || strtotime($product_special['date_start']) < time()) && ($product_special['date_end'] == '0000-00-00' || strtotime($product_special['date_end']) > time())) {
@@ -1675,19 +1667,80 @@ class ControllerCatalogProduct extends Controller {
 					}
 				}
 
-				$products[$category['category_id']][] = array(
-					'product_id' => $result['product_id'],
-					'name'       => $result['name'],
+				$products[$main_category][] = array(
+					'product_id' => $product['product_id'],
+					'name'       => $product['name'],
 					'image'      => $image,
 					'category'   => html_entity_decode($category['name']),
-					'model'      => $result['model'],
-					'sku'      	 => $result['sku'],
-					'price'      => $result['price'],
+					'model'      => $product['model'],
+					'sku'      	 => $product['sku'],
+					'price'      => $product['price'],
 					'special'    => $special,
-					'quantity'   => $result['quantity']
+					'quantity'   => $product['quantity']
 				);
 			}
+		}else{//якщо продукти не вибрані, в ексель заганяємо усі продукти відповідно до фільтру
+			$filter_data = array(
+				'filter_category' => $filter_category
+			);
+
+			$results_category = $this->model_catalog_category->getCategories($filter_data);
+
+			$filter_data = array(
+				'filter_name'	  => $filter_name,
+				'filter_model'	  => $filter_model,
+				'filter_price'	  => $filter_price,
+				'filter_quantity' => $filter_quantity,
+				'filter_status'   => $filter_status,
+				'filter_main_category' => 1,
+				'sort'            => $sort,
+				'order'           => $order,
+				//'start'           => ($page - 1) * $this->config->get('config_limit_admin'),
+				//'limit'           => $this->config->get('config_limit_admin')
+			);
+
+			foreach ($results_category as $category) {
+				$filter_data['filter_category'] = $category['category_id'];
+
+				$results = $this->model_catalog_product->getProducts($filter_data);
+
+				foreach ($results as $result) {
+
+					if (is_file(DIR_IMAGE . $result['image'])) {
+						$image = $this->model_tool_image->resize($result['image'], 40, 40);
+					} else {
+						$image = $this->model_tool_image->resize('no_image.png', 40, 40);
+					}
+
+					$image = str_replace(HTTP_IMAGE,DIR_IMAGE,$image);
+
+					$special = false;
+
+					$product_specials = $this->model_catalog_product->getProductSpecials($result['product_id']);
+
+					foreach ($product_specials  as $product_special) {
+						if (($product_special['date_start'] == '0000-00-00' || strtotime($product_special['date_start']) < time()) && ($product_special['date_end'] == '0000-00-00' || strtotime($product_special['date_end']) > time())) {
+							$special = $product_special['price'];
+
+							break;
+						}
+					}
+
+					$products[$category['category_id']][] = array(
+						'product_id' => $result['product_id'],
+						'name'       => $result['name'],
+						'image'      => $image,
+						'category'   => html_entity_decode($category['name']),
+						'model'      => $result['model'],
+						'sku'      	 => $result['sku'],
+						'price'      => $result['price'],
+						'special'    => $special,
+						'quantity'   => $result['quantity']
+					);
+				}
+			}
 		}
+
 
 		//$this->log->write($products);
 

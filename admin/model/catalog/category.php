@@ -226,6 +226,10 @@ class ModelCatalogCategory extends Model {
 			$sql .= " AND cd2.name LIKE '" . $this->db->escape($data['filter_name']) . "%'";
 		}
 
+		if (isset($data['filter_category']) && !empty($data['filter_category'])) {
+			$sql .= " AND cp.category_id ='" . (int)($data['filter_category']) . "'";
+		}
+
 		$sql .= " GROUP BY cp.category_id";
 
 		$sort_data = array(
