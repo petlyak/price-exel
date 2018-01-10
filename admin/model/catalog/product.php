@@ -361,13 +361,13 @@ class ModelCatalogProduct extends Model {
 
 	public function getProducts($data = array()) {
 		
-			$sql = "SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id)";
+		$sql = "SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id)";
 			
-			if (!empty($data['filter_category'])) {
-        $sql .= " LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p.product_id = p2c.product_id)";
-			}
+		if (!empty($data['filter_category']) || (isset($data['filter_main_category']) || !empty($data['filter_main_category']))) {
+        	$sql .= " LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p.product_id = p2c.product_id)";
+		}
 					
-			$sql .= " WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+		$sql .= " WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
             
 
 		if (!empty($data['filter_name'])) {
@@ -390,8 +390,7 @@ class ModelCatalogProduct extends Model {
 			$sql .= " AND p.status = '" . (int)$data['filter_status'] . "'";
 		}
 
-
-    if (!empty($data['filter_category'])) {
+    	if (!empty($data['filter_category'])) {
 			if (!empty($data['filter_sub_category'])) {
 				$implode_data = array();
 				
@@ -409,6 +408,10 @@ class ModelCatalogProduct extends Model {
 			} else {
 				$sql .= " AND p2c.category_id = '" . (int)$data['filter_category'] . "'";
 			}
+		}
+
+		if(isset($data['filter_main_category']) || !empty($data['filter_main_category'])){
+			$sql .= " AND p2c.main_category = '" . (int)$data['filter_main_category'] . "'";
 		}
             
 		$sql .= " GROUP BY p.product_id";

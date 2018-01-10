@@ -1550,134 +1550,6 @@ class ControllerCatalogProduct extends Controller {
 
 	public function toprint() {
 
-		/*if(isset($this->request->get['base'])){
-			$base = $this->request->get['base'];
-		}
-		else{
-			$base = DB_PLANETA;
-		}
-		if(isset($this->request->get['filter_provider'])){
-			$filter_provider = $this->request->get['filter_provider'];
-		}
-		else{
-			$filter_provider = NULL;
-		}
-		$this->load->language('sale/order');
-
-		$this->document->setTitle($this->current_title);
-
-		$this->load->model('sale/order');
-
-		if(isset($this->request->post['selected']) && !empty($this->request->post['selected'])){
-			$select_order = implode(',',array_unique($this->request->post['selected']));
-		}
-		else{
-			die('Нет выбраных заказов');
-		}
-
-		$results = $this->model_sale_order->getOrdersForExel($select_order, $base);
-		$shop_name = $this->shops[$base];
-
-		$price_selling = 0;
-		$price_baing = 0;
-		$orders = array();
-		foreach ($results as $result) {
-			$base_data = isset($result['sold_product_id']) ? $this->model_sale_order->getBasePrice($result['order_product_id'], $base) : array();
-			if($filter_provider && ($filter_provider != $base_data['base'])) continue;
-			$unique_data = $this->model_sale_order->getUniqueData($result['order_id'], $base);
-			$total = floatval($result['total']);
-			$user_delivery_price = $unique_data['user_delivery_price'] ? $unique_data['user_delivery_price'] : 0;
-			$prepayment = $unique_data['prepaiment'] ? $unique_data['prepaiment'] : 0;
-			$discount = $unique_data['discount'] ? $unique_data['discount'] : 0;
-
-			$to_pay = $total - $prepayment - $discount + $user_delivery_price;
-
-
-			$this->load->model('catalog/product');
-			$product = $this->model_catalog_product->getProduct($result['sold_product_id'],$base);
-			$product_total = !is_null($result['order_product_total_report'])? $result['order_product_total_report'] : $this->currency->format($result['order_product_total'],'',$result['currency_value']);
-			if(!empty($base_data)){
-				$cost_price = $base_data['price'];
-			}
-			else{
-				$cost_price = 0;
-			}
-
-			$options_list = '';
-
-			$order_option = $this->model_sale_order->getOrderOptions($result['order_id'], $result['order_product_id'],$base);
-			if(!empty($order_option)){
-				foreach($order_option as &$option){
-					$options_list .= "\n - ".$option['name'].": ".$option['value'].";";
-					if($option['price'] > 0){
-
-						switch($option['price_prefix']){
-							case '+':
-								$cost_price = $cost_price ? ($cost_price + $option['price']) * $result['quantity'] : 0;
-								break;
-							case '-':
-								$cost_price = $cost_price ? ($cost_price - $option['price']) * $result['quantity'] : 0;
-								break;
-							case '*':
-								$cost_price = $cost_price ? ($cost_price * $option['price']) * $result['quantity'] : 0;
-								break;
-							case '/':
-								$cost_price = $cost_price ? ($cost_price / $option['price']) * $result['quantity'] : 0;
-								break;
-
-							default: break;
-						}
-					}
-				}
-			}
-
-			if(!empty($base_data) && !is_null($base_data['costs_price_uah'])){
-				$cost_price_uah = $base_data['costs_price_uah'];//Цена в UAH
-			}else{
-				$cost_price_uah = 0;
-			}
-			if(!$cost_price){
-				$cost_price = 'Нет данных';
-			}
-
-
-
-			if($product_total && is_numeric($cost_price_uah)){
-				$pt = (int)(str_replace($this->language->get('thousand_point'),'',$product_total));
-				$price_selling += $pt;
-				$price_baing += $cost_price_uah;
-				$income = round(($pt - $cost_price_uah - $user_delivery_price), 2).' грн';
-			}
-			else{
-				$income = 'Недостаточно данных';
-			}
-
-			$orders[] = array(
-				'order_id'      => $result['order_id'],
-				'product'       => isset($result['sold_product']) ? $result['sold_product'].$options_list : '',
-				'status'        => $result['status'],
-				'status_color'  => $result['status_color'],
-				'shipping_city' => $result['shipping_city'],
-
-				'user_delivery_price'=> round($user_delivery_price, 2),
-				'to_pay'        => round($to_pay, 2),
-				'base_price'    => is_numeric($cost_price) ? round($cost_price, 2) : $cost_price,
-				'base_name'     => !empty($base_data) ? $base_data['base'] : '',
-				'provider_status' => $unique_data['provider_status'],
-				'manager_procent' => $unique_data['manager_procent'],
-				'company_declaration'=> $unique_data['company_declaration'],
-				'currency_provider'=> $unique_data['currency_provider'],
-				'currency_provider_valute'=> $unique_data['currency_provider_valute'],
-
-				'product_total' => round($product_total, 2),
-				'product_location' => (isset($product['location']) && $product['location']) ? $product['location'] : 'USD',
-				'cost_price' => is_numeric($cost_price_uah) ? round($cost_price_uah).' грн' : $cost_price_uah,
-				'income' => $income,
-				'currency_client' => round($result['currency_value'], 2),
-				'date_modified' => date($this->language->get('date_format_short'), strtotime($result['date_modified'])),
-			);
-		}*/
-
 		if (isset($this->request->get['filter_name'])) {
 			$filter_name = $this->request->get['filter_name'];
 		} else {
@@ -1702,12 +1574,6 @@ class ControllerCatalogProduct extends Controller {
 			$filter_quantity = null;
 		}
 
-		if (isset($this->request->get['filter_category'])) {
-			$filter_category = $this->request->get['filter_category'];
-		} else {
-			$filter_category = NULL;
-		}
-
 		if (isset($this->request->get['filter_status'])) {
 			$filter_status = $this->request->get['filter_status'];
 		} else {
@@ -1724,12 +1590,6 @@ class ControllerCatalogProduct extends Controller {
 			$order = $this->request->get['order'];
 		} else {
 			$order = 'ASC';
-		}
-
-		if (isset($this->request->get['page'])) {
-			$page = $this->request->get['page'];
-		} else {
-			$page = 1;
 		}
 
 		$url = '';
@@ -1754,10 +1614,6 @@ class ControllerCatalogProduct extends Controller {
 			$url .= '&filter_quantity=' . $this->request->get['filter_quantity'];
 		}
 
-		if (isset($this->request->get['filter_category'])) {
-			$url .= '&filter_category=' . $this->request->get['filter_category'];
-		}
-
 		if (isset($this->request->get['filter_status'])) {
 			$url .= '&filter_status=' . $this->request->get['filter_status'];
 		}
@@ -1770,9 +1626,12 @@ class ControllerCatalogProduct extends Controller {
 			$url .= '&order=' . $this->request->get['order'];
 		}
 
-		if (isset($this->request->get['page'])) {
-			$url .= '&page=' . $this->request->get['page'];
-		}
+		$this->language->load('catalog/product');
+		$this->load->model('catalog/product');
+		$this->load->model('catalog/category');
+		$this->load->model('tool/image');
+
+		$results_category = $this->model_catalog_category->getCategories();
 
 		$products = array();
 
@@ -1781,58 +1640,56 @@ class ControllerCatalogProduct extends Controller {
 			'filter_model'	  => $filter_model,
 			'filter_price'	  => $filter_price,
 			'filter_quantity' => $filter_quantity,
-			'filter_category' => $filter_category,
 			'filter_status'   => $filter_status,
+			'filter_main_category' => 1,
 			'sort'            => $sort,
 			'order'           => $order,
-			'start'           => ($page - 1) * $this->config->get('config_limit_admin'),
-			'limit'           => $this->config->get('config_limit_admin')
+			//'start'           => ($page - 1) * $this->config->get('config_limit_admin'),
+			//'limit'           => $this->config->get('config_limit_admin')
 		);
 
-		$this->language->load('catalog/product');
-		$this->load->model('catalog/product');
-		$this->load->model('catalog/category');
-		$this->load->model('tool/image');
+		foreach ($results_category as $category) {
+			$filter_data['filter_category'] = $category['category_id'];
 
-		$results = $this->model_catalog_product->getProducts($filter_data);
+			$results = $this->model_catalog_product->getProducts($filter_data);
 
-		foreach ($results as $result) {
+			foreach ($results as $result) {
 
-			$category_id =  $this->model_catalog_product->getProductMainCategoryId($result['product_id']);
-			$category = $this->model_catalog_category->getCategory($category_id);
-
-			if (is_file(DIR_IMAGE . $result['image'])) {
-				$image = $this->model_tool_image->resize($result['image'], 40, 40, 'onesize');
-			} else {
-				$image = $this->model_tool_image->resize('no_image.png', 40, 40, 'onesize');
-			}
-
-			$image = str_replace(HTTP_IMAGE,DIR_IMAGE,$image);
-
-			$special = false;
-
-			$product_specials = $this->model_catalog_product->getProductSpecials($result['product_id']);
-
-			foreach ($product_specials  as $product_special) {
-				if (($product_special['date_start'] == '0000-00-00' || strtotime($product_special['date_start']) < time()) && ($product_special['date_end'] == '0000-00-00' || strtotime($product_special['date_end']) > time())) {
-					$special = $product_special['price'];
-
-					break;
+				if (is_file(DIR_IMAGE . $result['image'])) {
+					$image = $this->model_tool_image->resize($result['image'], 40, 40);
+				} else {
+					$image = $this->model_tool_image->resize('no_image.png', 40, 40);
 				}
-			}
 
-			$products[] = array(
-				'product_id' => $result['product_id'],
-				'name'       => $result['name'],
-				'image'      => $image,
-				'category'   => $category['name'],
-				'model'      => $result['model'],
-				'sku'      	 => $result['sku'],
-				'price'      => $result['price'],
-				'special'    => $special,
-				'quantity'   => $result['quantity']
-			);
+				$image = str_replace(HTTP_IMAGE,DIR_IMAGE,$image);
+
+				$special = false;
+
+				$product_specials = $this->model_catalog_product->getProductSpecials($result['product_id']);
+
+				foreach ($product_specials  as $product_special) {
+					if (($product_special['date_start'] == '0000-00-00' || strtotime($product_special['date_start']) < time()) && ($product_special['date_end'] == '0000-00-00' || strtotime($product_special['date_end']) > time())) {
+						$special = $product_special['price'];
+
+						break;
+					}
+				}
+
+				$products[$category['category_id']][] = array(
+					'product_id' => $result['product_id'],
+					'name'       => $result['name'],
+					'image'      => $image,
+					'category'   => html_entity_decode($category['name']),
+					'model'      => $result['model'],
+					'sku'      	 => $result['sku'],
+					'price'      => $result['price'],
+					'special'    => $special,
+					'quantity'   => $result['quantity']
+				);
+			}
 		}
+
+		//$this->log->write($products);
 
 		$headerStyle = array(
 			'font' => array(
@@ -1848,8 +1705,8 @@ class ControllerCatalogProduct extends Controller {
 		$sheet = $xls->getActiveSheet();
 
 		$sheet->setTitle('Продукти');
-		$sheet->getColumnDimension('A')->setWidth(40);
-		$sheet->getColumnDimension('B')->setWidth(20);
+		$sheet->getColumnDimension('A')->setWidth(30);
+		$sheet->getColumnDimension('B')->setWidth(40);
 		$sheet->getColumnDimension('C')->setWidth(20);
 		$sheet->getColumnDimension('D')->setWidth(20);
 		$sheet->getColumnDimension('E')->setWidth(20);
@@ -1876,7 +1733,7 @@ class ControllerCatalogProduct extends Controller {
 			)
 		));
 
-		$sheet->setCellValue("A2", 'Назва');
+		$sheet->setCellValue("A2", 'Назва категорії');
 		$sheet->getStyle('A2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 		$sheet->getStyle('A2')->getFill()->getStartColor()->setRGB('CDDDDD');
 		$sheet->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
@@ -1884,7 +1741,7 @@ class ControllerCatalogProduct extends Controller {
 		$sheet->getStyle('A2')->getAlignment()->setWrapText(true);
 		$sheet->getStyle('A2')->applyFromArray($headerStyle);
 
-		$sheet->setCellValue("B2", 'Фото');
+		$sheet->setCellValue("B2", 'Назва товару');
 		$sheet->getStyle('B2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 		$sheet->getStyle('B2')->getFill()->getStartColor()->setRGB('CDDDDD');
 		$sheet->getStyle('B2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
@@ -1892,7 +1749,7 @@ class ControllerCatalogProduct extends Controller {
 		$sheet->getStyle('B2')->getAlignment()->setWrapText(true);
 		$sheet->getStyle('B2')->applyFromArray($headerStyle);
 
-		$sheet->setCellValue("C2", 'Назва розділу');
+		$sheet->setCellValue("C2", 'Фото');
 		$sheet->getStyle('C2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 		$sheet->getStyle('C2')->getFill()->getStartColor()->setRGB('CDDDDD');
 		$sheet->getStyle('C2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
@@ -1941,60 +1798,66 @@ class ControllerCatalogProduct extends Controller {
 		$sheet->getStyle('H2')->applyFromArray($headerStyle);
 
 		$numRow = 3;
-		foreach($products as $product){
-			$sheet->setCellValue("A".$numRow, $product['name']);
-			$sheet->getStyle('A'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$sheet->getStyle('A'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			$sheet->getStyle('A'.$numRow)->getAlignment()->setWrapText(true);
+		foreach($products as $category){
+			$count = count($category);
+			foreach($category as $key => $product) {
+				if($key==0){
+					$sheet->setCellValue("A" . $numRow, $product['category']);//назва категорії для групи товарів
+					$sheet->getStyle('A' . $numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+					$sheet->getStyle('A' . $numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+					$sheet->getStyle('A' . $numRow)->getAlignment()->setWrapText(true);
+					if($count>1){
+						$sheet->mergeCells('A'.$numRow.':A'.($numRow+$count-1));
+					}
+				}
 
-			/*$sheet->setCellValue("B".$numRow, $product['image']);*/
-			if (file_exists($product['image'])) {
-				$image = new PHPExcel_Worksheet_Drawing();
-				$image->setPath($product['image']);
-				$image->setCoordinates("B".$numRow);
-				$image->setOffsetX(30);
-				$image->setOffsetY(2);
-				$image->setHeight(40);
-				$image->setWidth(40);
-				$sheet->getRowDimension($numRow)->setRowHeight(35);
-				//$sheet->getColumnDimension("B")->setWidth(35);
-				$image->setWorksheet($sheet);
+				$sheet->setCellValue("B" . $numRow, $product['name']);
+				$sheet->getStyle('B' . $numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$sheet->getStyle('B' . $numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$sheet->getStyle('B' . $numRow)->getAlignment()->setWrapText(true);
+
+				if (file_exists($product['image'])) {
+					$image = new PHPExcel_Worksheet_Drawing();
+					$image->setPath($product['image']);
+					$image->setCoordinates("C" . $numRow);
+					$image->setOffsetX(30);
+					$image->setOffsetY(2);
+					$image->setHeight(40);
+					$image->setWidth(40);
+					$sheet->getRowDimension($numRow)->setRowHeight(35);
+					$image->setWorksheet($sheet);
+				}
+				$sheet->getStyle('C' . $numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$sheet->getStyle('C' . $numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$sheet->getStyle('C' . $numRow)->getAlignment()->setWrapText(true);
+
+				$sheet->setCellValue("D" . $numRow, $product['model']);
+				$sheet->getStyle('D' . $numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$sheet->getStyle('D' . $numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$sheet->getStyle('D' . $numRow)->getAlignment()->setWrapText(true);
+
+				$sheet->setCellValue("E" . $numRow, $product['sku']);
+				$sheet->getStyle('E' . $numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$sheet->getStyle('E' . $numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$sheet->getStyle('E' . $numRow)->getAlignment()->setWrapText(true);
+
+				$sheet->setCellValue("F" . $numRow, $product['price']);
+				$sheet->getStyle('F' . $numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$sheet->getStyle('F' . $numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$sheet->getStyle('F' . $numRow)->getAlignment()->setWrapText(true);
+
+				$sheet->setCellValue("G" . $numRow, $product['special'] ? $product['special'] : '');
+				$sheet->getStyle('G' . $numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$sheet->getStyle('G' . $numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$sheet->getStyle('G' . $numRow)->getAlignment()->setWrapText(true);
+
+				$sheet->setCellValue("H" . $numRow, $product['quantity']);
+				$sheet->getStyle('H' . $numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$sheet->getStyle('H' . $numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$sheet->getStyle('H' . $numRow)->getAlignment()->setWrapText(true);
+
+				$numRow++;
 			}
-			$sheet->getStyle('B'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$sheet->getStyle('B'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			$sheet->getStyle('B'.$numRow)->getAlignment()->setWrapText(true);
-
-			$sheet->setCellValue("C".$numRow, '');
-			$sheet->getStyle('C'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$sheet->getStyle('C'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			$sheet->getStyle('C'.$numRow)->getAlignment()->setWrapText(true);
-
-			$sheet->setCellValue("D".$numRow, $product['model']);
-			$sheet->getStyle('D'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$sheet->getStyle('D'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			$sheet->getStyle('D'.$numRow)->getAlignment()->setWrapText(true);
-
-			$sheet->setCellValue("E".$numRow, $product['sku']);
-			$sheet->getStyle('E'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$sheet->getStyle('E'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			$sheet->getStyle('E'.$numRow)->getAlignment()->setWrapText(true);
-
-			$sheet->setCellValue("F".$numRow, $product['price']);
-			$sheet->getStyle('F'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$sheet->getStyle('F'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			$sheet->getStyle('F'.$numRow)->getAlignment()->setWrapText(true);
-
-			$sheet->setCellValue("G".$numRow, $product['special']?$product['special']:'');
-			$sheet->getStyle('G'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$sheet->getStyle('G'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			$sheet->getStyle('G'.$numRow)->getAlignment()->setWrapText(true);
-
-			$sheet->setCellValue("H".$numRow, $product['quantity']);
-			$sheet->getStyle('H'.$numRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$sheet->getStyle('H'.$numRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			$sheet->getStyle('H'.$numRow)->getAlignment()->setWrapText(true);
-
-			$numRow++;
 		}
 
 		/*header ( "Expires: Mon, 1 Apr 1974 05:00:00 GMT" );
